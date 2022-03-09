@@ -1,7 +1,6 @@
 import * as fs from 'fs';
-import { parse } from 'path';
 
-const inputData: string = fs.readFileSync('day1.txt','utf-8');
+const inputData: string = fs.readFileSync('day1part1.txt','utf-8');
 const splitData: Array<string>  = inputData.split('\n')
 
 var count: number = 0;
@@ -15,3 +14,5 @@ for (let i = 1; i < splitData.length; i++) {
 }
 
 console.log(count)
+
+//answer is 1228

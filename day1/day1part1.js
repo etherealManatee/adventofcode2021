@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var fs = require("fs");
-var inputData = fs.readFileSync('day1.txt', 'utf-8');
+var inputData = fs.readFileSync('day1part1.txt', 'utf-8');
 var splitData = inputData.split('\n');
 var count = 0;
 for (var i = 1; i < splitData.length; i++) {
@@ -12,3 +12,4 @@ for (var i = 1; i < splitData.length; i++) {
     }
 }
 console.log(count);
+//answer is 1228
