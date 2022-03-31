@@ -33,8 +33,8 @@ var checkWin = function (singleCardArray) {
     for (var i = 0; i < singleCardArray.length; i++) {
         if (singleCardArray[i].every(function (e) { return e === "-"; })) {
             winningCard = singleCardArray;
-            console.log(winningCard);
-            console.log(currentNumber);
+            // console.log(winningCard);
+            // console.log(currentNumber);
             return true;
         }
     }
@@ -78,8 +78,8 @@ var checkWin = function (singleCardArray) {
     for (var i = 0; i < verticals.length; i++) {
         if (verticals[i].every(function (e) { return e === "-"; })) {
             winningCard = singleCardArray;
-            console.log(winningCard);
-            console.log(currentNumber);
+            // console.log(winningCard);
+            // console.log(currentNumber);
             return true;
         }
     }
@@ -117,10 +117,115 @@ var playBingo = function (array, numbers) {
 };
 playBingo(allCardsArray, drawNumbers);
 // console.log(allCardsArray)
-var flatten = winningCard.flat().filter(function (e) { return e != '-'; });
-console.log(flatten);
+var flatten = winningCard.flat().filter(function (e) { return e != "-"; });
+// console.log(flatten);
 var sum = 0;
 for (var i = 0; i < flatten.length; i++) {
     sum += parseInt(flatten[i]);
 }
 console.log(currentNumber, parseInt(currentNumber) * sum);
+//part2
+allCardsArray = [];
+createCards(splitData);
+var lastWinningNumber = "";
+var currentWinningCard = [];
+//function for checking a single card for column or row that is all '-', if True, set the currentWinningCard and the lastWinningNumber
+var checkWin2 = function (singleCardArray, number) {
+    //check horizontals
+    for (var i = 0; i < singleCardArray.length; i++) {
+        if (singleCardArray[i].every(function (e) { return e === "-"; })) {
+            currentWinningCard = singleCardArray;
+            lastWinningNumber = number;
+            return true;
+        }
+    }
+    //check verticals
+    var v1 = [
+        singleCardArray[0][0],
+        singleCardArray[1][0],
+        singleCardArray[2][0],
+        singleCardArray[3][0],
+        singleCardArray[4][0],
+    ];
+    var v2 = [
+        singleCardArray[0][1],
+        singleCardArray[1][1],
+        singleCardArray[2][1],
+        singleCardArray[3][1],
+        singleCardArray[4][1],
+    ];
+    var v3 = [
+        singleCardArray[0][2],
+        singleCardArray[1][2],
+        singleCardArray[2][2],
+        singleCardArray[3][2],
+        singleCardArray[4][2],
+    ];
+    var v4 = [
+        singleCardArray[0][3],
+        singleCardArray[1][3],
+        singleCardArray[2][3],
+        singleCardArray[3][3],
+        singleCardArray[4][3],
+    ];
+    var v5 = [
+        singleCardArray[0][4],
+        singleCardArray[1][4],
+        singleCardArray[2][4],
+        singleCardArray[3][4],
+        singleCardArray[4][4],
+    ];
+    var verticals = [v1, v2, v3, v4, v5];
+    for (var i = 0; i < verticals.length; i++) {
+        if (verticals[i].every(function (e) { return e === "-"; })) {
+            winningCard = singleCardArray;
+            lastWinningNumber = number;
+            return true;
+        }
+    }
+    return false;
+};
+var checkAllCardsForWin = function (cardsArray, currentNumber) {
+    for (var i = 0; i < cardsArray.length; i++) {
+        var status_2 = false;
+        status_2 = checkWin2(allCardsArray[i], currentNumber);
+        if (status_2 === true) {
+            allCardsArray.splice(i, 1);
+            return checkAllCardsForWin(allCardsArray, currentNumber);
+        }
+    }
+};
+var playBingo2 = function (numbers) {
+    //loop through all the draw numbers
+    for (var i = 0; i < numbers.length; i++) {
+        currentNumber = numbers[i];
+        markNumber(currentNumber, allCardsArray);
+        checkAllCardsForWin(allCardsArray, currentNumber);
+    }
+};
+//check each card for the number, and if exist, replace it with '-'
+var markNumber = function (currentNumber, cardArray) {
+    for (var j = 0; j < cardArray.length; j++) {
+        var status_3 = false;
+        var currentCard = cardArray[j]; //card at index j
+        //loop through each row in the card
+        for (var k = 0; k < currentCard.length; k++) {
+            var currentRow = currentCard[k];
+            if (currentRow.findIndex(function (e) { return e === currentNumber; }) === -1) {
+                continue;
+            }
+            else {
+                var indexOfNumber = currentRow.findIndex(function (e) { return e === currentNumber; });
+                allCardsArray[j][k][indexOfNumber] = "-";
+            }
+        }
+    }
+};
+playBingo2(drawNumbers);
+var flatten2 = winningCard.flat().filter(function (e) { return e != "-"; });
+console.log(flatten2);
+var sum2 = 0;
+for (var i = 0; i < flatten2.length; i++) {
+    sum2 += parseInt(flatten2[i]);
+}
+console.log(parseInt(lastWinningNumber) * sum2);
